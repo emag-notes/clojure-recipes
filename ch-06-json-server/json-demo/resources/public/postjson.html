@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>postjson</title>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+
+<form action="/a" id="jsonForm">
+  <input type="submit" value="Submit a JSON post"/>
+</form>
+
+<div id="result"></div>
+
+<script>
+  $("#jsonForm").submit(function(event) {
+    event.preventDefault();
+    var book = {
+      "Title" : "The Adventrures of Tom Sawyer",
+      "Author" : "Mark Twain",
+      "Year" : "1876"
+    };
+
+    var bookJSON = JSON.stringify(book);
+    var $form = $(this),
+        url = $form.attr('action');
+
+    var postResult = $.post(url, {s: bookJSON});
+
+    postResult.done(function(data) {
+      console.log(data);
+      var result = "";
+      $(data).each(function (i, val) {
+        $.each(val, function (k, v) {
+          console.log(k + ":" + v);
+          result += k + ":" + v + "<br/>";
+        });
+      });
+      $("#result").empty().append(result);
+    });
+  });
+</script>
+
+</body>
+</html>
